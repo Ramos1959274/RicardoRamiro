@@ -6,8 +6,8 @@
     "background_color": "#0000",
     "description": "pagina donde hablo sobre mi persona",
     "icons": [{
-      "src": "3.jpg",
+      "src": "3.png",
       "sizes": "144x144",
-      "type": "image/jpg"
+      "type": "image/png"
     }]
 }
