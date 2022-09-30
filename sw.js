@@ -1,41 +1,59 @@
-self.addEventListener('install', function(event){
-    event.waitUntil(
-        caches.open('cache01').then(function(cache){
-            return cache.addAll([
-                '/',
-                'index.html',
-                'main.css',
-                '1.jpg',
-                '2.jpg'
-            ]);
-        })
-    );
+'use strict';
+
+// CODELAB: Update cache names any time any of the cached files change.
+const CACHE_NAME = 'static-cache-v9';
+
+// CODELAB: Add list of files to cache here.
+const FILES_TO_CACHE = [
+  '/offline.html',
+  '/index.html',
+  '/1.jpg',
+  '/2.jpg'
+];
+
+self.addEventListener('install', (evt) => {
+  console.log('[ServiceWorker] Install');
+  // CODELAB: Precache static resources here.
+  evt.waitUntil(
+      caches.open(CACHE_NAME).then((cache) => {
+        console.log('[ServiceWorker] Pre-caching offline page');
+        return cache.addAll(FILES_TO_CACHE);
+      })
+  );
+  self.skipWaiting();
 });
 
-self.addEventListener('fetch', function(event) {
-    event.respondWith(
-        caches.match(event.request)
-            .then(function(response){
-                if(response) {
-                    return response;
-                }
-                return fetch(event.request);
-            }
-        )
-    )
+self.addEventListener('activate', (evt) => {
+  console.log('[ServiceWorker] Activate');
+  // CODELAB: Remove previous cached data from disk.
+  evt.waitUntil(
+      caches.keys().then((keyList) => {
+        return Promise.all(keyList.map((key) => {
+          if (key !== CACHE_NAME) {
+            console.log('[ServiceWorker] Removing old cache', key);
+            return caches.delete(key);
+          }
+        }));
+      })
+  );
+  self.clients.claim();
 });
 
-self.addEventListener('activate', function(event) {
-    var cacheWhitelist = ['cache01'];
-    event.waitUntil(
-        caches.keys().then(function(cacheNames) {
-            return Promise.all(
-                cacheNames.map(function(cacheNames){
-                    if (cacheWhitelist.indexOf(cacheNames) === -1){
-                        return caches.delite(cacheNames);
-                    }
-                })
-            );
-        })
-    );
-})
+self.addEventListener('fetch', (evt) => {
+  // CODELAB: Add fetch event handler here.
+  // if (evt.request.mode !== 'navigate') {
+  //   // Not a page navigation, bail.
+  //   console.log("Fetch no navigate");
+  //   return;
+  // }
+  console.log('[ServiceWorker] Fetch', evt.request.url);
+  evt.respondWith(
+      caches.open(CACHE_NAME).then((cache) => {
+        return cache.match(evt.request)
+            .then((response) => {
+              console.log("RESP", response);
+              return response || fetch(evt.request);
+            });
+      })
+  );
+});
