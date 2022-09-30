@@ -7,7 +7,7 @@
     "description": "pagina donde hablo sobre mi persona",
     "icons": [{
       "src": "3.jpg",
-      "sizes": "304x304",
+      "sizes": "144x144",
       "type": "image/jpg"
     }]
 }
