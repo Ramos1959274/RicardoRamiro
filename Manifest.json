@@ -6,12 +6,8 @@
     "background_color": "#0000",
     "description": "pagina donde hablo sobre mi persona",
     "icons": [{
-      "src": "edge-logo-spin.svg",
-      "sizes": "48x48",
-      "type": "image/svg"
-    }, {
-      "src": "edge-logo-spin.svg",
-      "sizes": "72x72",
-      "type": "image/svg"
+      "src": "3.jpg",
+      "sizes": "314x512",
+      "type": "image/jpg"
     }]
 }
