@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <!--enlasar css-->
     <link rel="stylesheet" href="main.css">
+    <link rel="manifest" href="./Manifest.json">
 </head>
 <body>
     
@@ -49,6 +50,19 @@
         </div>
 
     </div>
-
+<script type="text/javascript">
+if ('serviceWoeker' in navigator) {
+    window.addEventListener('load', function(){
+        navigator.serviceWorker.register('sw.js').then(
+            function(registration){
+                console.log('SW registrado correctamente');
+            },
+            function(err){
+                console.log('SW fallo', err);
+            }
+        );
+    });
+}
+</script>
 </body>
 </html>
